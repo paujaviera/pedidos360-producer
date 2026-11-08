@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost/jwks
+
+app:
+  rabbit:
+    exchange:
+      pedidos: pedidos.exchange
+    routing-key:
+      pedido-creado: pedido.creado
+      pedido-estado: pedido.estado.cambiado
