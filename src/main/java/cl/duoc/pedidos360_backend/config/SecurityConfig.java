@@ -2,6 +2,8 @@ package cl.duoc.pedidos360_backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -12,11 +14,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+            .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
 
-                // Consultar pedidos
-                .requestMatchers("/api/pedidos")
+                // Preflight CORS sin token
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                // Pedidos: consultar, crear y cambiar estado
+                .requestMatchers("/api/pedidos", "/api/pedidos/**")
                 .hasAuthority("SCOPE_pedidos360-api/pedidos360-api-read")
 
                 // Consultar productos
